@@ -1,0 +1,10 @@
+---
+galaxy_info:
+  author: "Bharat Kunwar"
+  description: swapfile
+  license: MIT
+  min_ansible_version: 2.4 
+  version: 0.0
+  categories:
+    - system
+  dependencies: []

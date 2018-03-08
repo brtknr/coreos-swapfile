@@ -1,0 +1,41 @@
+---
+- name: Create directory
+  file:
+    path: '{{ swapfile_path }}'
+    owner: root
+    group: root
+    mode: 0755
+    recurse: yes
+
+- name: Write swapfile
+  command: |
+    fallocate -l {{ swapfile_size }} {{ swapfile_location }} creates={{ swapfile_location }}
+  register: write_swapfile
+  when: swapfile_size != false
+
+- name: Set swapfile permissions
+  file: path={{ swapfile_location }} mode=600
+  when: swapfile_size != false
+
+- name: Make swapfile
+  ignore_errors: yes
+  command: mkswap {{ swapfile_location }}
+  when: swapfile_size != false
+
+- name: Create systemd unit file
+  template:
+    src: swapfile.swap.j2
+    dest: /etc/systemd/system/swapfile.swap
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable systemctl
+  command:
+    systemctl enable --now swapfile.swap
+  when: swapfile_size != false
+
+- name: Configure vm.swappiness
+  lineinfile: dest=/etc/sysctl.d/80-swappiness.conf line="vm.swappiness={{ swapfile_swappiness }}" regexp="^vm.swappiness[\s]?=" state=present create=yes mode=0644 owner=root group=root
+  notify: Reload sysctl
+  when: swapfile_swappiness != false
