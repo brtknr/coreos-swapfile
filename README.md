@@ -23,18 +23,18 @@ The following variables are set to `False` by default and will not have any effe
 
 ## Usage
 
-{{< /highlight >}}yaml
+```yaml
 - hosts: all
   roles:
     - coreos-swapfile
-{{< /highlight >}}
+```
 
 or:
 
-{{< /highlight >}}yaml
+```yaml
 - hosts: all
   roles:
     - { role: coreos-swapfile, swapfile_size: 1GB, swapfile_swappiness: 10 }
-{{< /highlight >}}
+```
 
 You can also set the variables described above in `group_vars` or `host_vars` (see `defaults/main.yml`).
