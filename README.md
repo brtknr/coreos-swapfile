@@ -24,17 +24,17 @@ The following variables are set to `False` by default and will not have any effe
 ## Usage
 
 ```yaml
-- hosts: all
+- hosts: swapfile_enabled_hosts
   roles:
-    - coreos-swapfile
+  - { role: coreos-swapfile-ansible, when: ansible_distribution == "CoreOS" }
 ```
 
 or:
 
 ```yaml
-- hosts: all
+- hosts: swapfile_enabled_hosts
   roles:
-    - { role: coreos-swapfile, swapfile_size: 1GB, swapfile_swappiness: 10 }
+  - { role: coreos-swapfile-ansible, when: ansible_distribution == "CoreOS", swapfile_size: 1GB, swapfile_swappiness: 10 }
 ```
 
 You can also set the variables described above in `group_vars` or `host_vars` (see `defaults/main.yml`).
